@@ -46,7 +46,7 @@ def split_file(input_file, max_file_size):
   """
   for prefix in NAMESPACES:
     ElementTree.register_namespace(prefix, NAMESPACES[prefix])
-  print 'Parsing...'
+  print 'Parsing %s...' % (input_file,)
   root = ElementTree.parse(input_file).getroot()
   channel = root.find('channel')
   items = channel.findall('item')
@@ -60,7 +60,7 @@ def split_file(input_file, max_file_size):
     add_items(channel, first_items)
     xml = ElementTree.tostring(root)
     partial_filename = compute_partial_filename(input_file, partial_count)
-    print 'Writing %s with %s items (%s bytes, %.2f%%)' % (
+    print 'Writing %s with %s items (%s bytes, %.2f%% of target size)' % (
       partial_filename, len(first_items), len(xml),
       100.0 * len(xml) / max_file_size)
     with open(partial_filename, 'wb') as out:
