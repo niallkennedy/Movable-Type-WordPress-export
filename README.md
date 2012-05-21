@@ -54,3 +54,11 @@ equivalent WordPress blog for the best results.
 You may choose to break up your export into multiple files for
 reliability. The WordPress importer should be smart enough to detect
 duplicate content between imports.
+
+# Potential problems and how to solve them
+
+## Character encoding
+
+Movable Type does not always do a good job.
+
+
