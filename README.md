@@ -57,7 +57,7 @@ duplicate content between imports.
 
 # Potential problems and how to solve them
 
-## Text encoding
+## Bad text encodings
 
 Movable Type does not enforce a consistent text encoding.  Even if
 your Movable Type is configured to use UTF-8 encoding, posts and
@@ -74,6 +74,33 @@ in UTF-8:
 You might have to experiment with different values for the
 `--from-code` argument to get good results.
 
+## Export file too large
 
+You may find that the export file created by Movable Type is too large
+for Wordpress to process.  If this happens, you can use the
+`wxr_split` program to split the export file into multiple smaller
+files and then import them one by one into Wordpress.
 
+Here's an example of using `wxr_split`:
 
+    $ python wxr_split.py export.xml
+    Parsing export.xml...
+    Found 1534 items
+    Writing export-1.xml with 355 items (1885301 bytes, 99.89% of target size)
+    Writing export-2.xml with 432 items (1887144 bytes, 99.98% of target size)
+    Writing export-3.xml with 252 items (1082251 bytes, 57.34% of target size)
+    Writing export-4.xml with 147 items (1886296 bytes, 99.94% of target size)
+    Writing export-5.xml with 347 items (1580660 bytes, 83.75% of target size)
+
+## Movable Type too old
+
+The template file `wxr.mhtml` requires a recent Movable Type, probably
+at least version 4 or later.  If you know you're running an older
+version of Movable Type or you try using `wxr.mhtml` and get errors
+while importing, you can try using the `wxr-3.2.mhtml` template, which
+only requires Movable Type 3.2 or later.
+
+`wxr-3.2.mhtml` does not handle pages or assets, which were added in
+later versions of Movable Type.  Before using it you will need to edit
+it and replace the placeholder values marked with "`CHANGEME`" with
+appropriate values.
