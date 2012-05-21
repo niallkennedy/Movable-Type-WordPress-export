@@ -92,6 +92,9 @@ Here's an example of using `wxr_split`:
     Writing export-4.xml with 147 items (1886296 bytes, 99.94% of target size)
     Writing export-5.xml with 347 items (1580660 bytes, 83.75% of target size)
 
+By default it will create files with a maximum size of 1.8 megabytes,
+but you can use the `--max-size` flag to set a different size limit.
+
 ## Movable Type too old
 
 The template file `wxr.mhtml` requires a recent Movable Type, probably
@@ -100,7 +103,7 @@ version of Movable Type or you try using `wxr.mhtml` and get errors
 while importing, you can try using the `wxr-3.2.mhtml` template, which
 only requires Movable Type 3.2 or later.
 
-`wxr-3.2.mhtml` does not handle pages or assets, which were added in
-later versions of Movable Type.  Before using it you will need to edit
-it and replace the placeholder values marked with "`CHANGEME`" with
-appropriate values.
+`wxr-3.2.mhtml` does not handle pages or assets, which are features
+that were added in later versions of Movable Type.  Before using it
+you will need to edit the file and replace the placeholder values
+marked with "CHANGEME" with appropriate values.
