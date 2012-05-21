@@ -4,7 +4,11 @@ Export your Movable Type entries, pages, and assets as a WordPress eXtended RSS 
 
 The official [Movable Type and TypePad importer for WordPress](http://wordpress.org/extend/plugins/movabletype-importer/ "Movable Type and TypePad importer plugin for WordPress") relies on a basic Movable Type export format.
 
-The Movable Type WordPress export format describes your Movable Type blog using the native descriptors in the WordPress import/export library. Your blog content is better mapped to WordPress. A few benefits over the standard WordPress importer for Movable Type post exports:
+The Movable Type WordPress export format describes your Movable Type
+blog using the native descriptors in the WordPress import/export
+library. Your blog content is better mapped to WordPress. A few
+benefits over the standard WordPress importer for Movable Type post
+exports:
 
 * Map all of your basenames from posts, pages, categories, and tags to maintain URL integrity.
 * Correlate post and comment status between Movable Type and WordPress descriptors.
@@ -26,9 +30,16 @@ The Movable Type WordPress export format describes your Movable Type blog using 
 5. Customize export settings such as total number of entries per file, entries offset, and enable individual export sections such as entries, pages, and assets.
 6. Save & Publish.
 
-WordPress occasionally experiences issues with large imports. The Movable Type export template for WordPress helps you break up your Movable Type blog into multiple export files for reliability and testing. Set the `number_of_entries` variable to a high number such as 9999 to export your entire blog at once.
+WordPress occasionally experiences issues with large imports. The
+Movable Type export template for WordPress helps you break up your
+Movable Type blog into multiple export files for reliability and
+testing. Set the `number_of_entries` variable to a high number such as
+9999 to export your entire blog at once.
 
-The __Network > Blog__ relationship in WordPress is similar to the __Website > Blog__ relationship in Movable Type. Set up your WordPress network and blogs, then export from Movable Type blog into the equivalent WordPress blog for the best results.
+The __Network > Blog__ relationship in WordPress is similar to the
+__Website > Blog__ relationship in Movable Type. Set up your WordPress
+network and blogs, then export from Movable Type blog into the
+equivalent WordPress blog for the best results.
 
 # WordPress import instructions
 
@@ -40,4 +51,6 @@ The __Network > Blog__ relationship in WordPress is similar to the __Website > B
 6. You will be asked to map the authors in your export file to users on your WordPress site. For each author you may choose to map to an existing user on the site or create a new WordPress user.
 7. WordPress will then import each of the posts, pages, comments, categories, assets, etc. contained in your export file into your WordPress blog.
 
-You may choose to break up your export into multiple files for reliability. The WordPress importer should be smart enough to detect duplicate content between imports.
+You may choose to break up your export into multiple files for
+reliability. The WordPress importer should be smart enough to detect
+duplicate content between imports.
