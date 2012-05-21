@@ -70,6 +70,37 @@ def split_file(input_file, max_file_size):
       root, rest_items, max_file_size)
 
 
+def partition_items(root, items, max_file_size):
+  """Finds the initial subsequence of items such that if that
+  subsequence is serialized to XML the file size would be less than
+  but as close as possible to max_file_size.
+
+  Returns:
+    A tuple (FIRST, REST) where FIRST is the initial subsequence of
+    items that will fit in the specified size and REST is the rest of
+    the items.
+  """
+
+  def file_size(items, pos):
+    add_items(channel, items[0:pos])
+    size = len(ElementTree.tostring(root))
+    remove_items(channel, items[0:pos])
+    return size
+
+  channel = root.find('channel')
+  remove_items(channel, channel.findall('item'))
+  if items:
+    # We do a binary search to find the cutoff point for what items
+    # will be included in the next partial file.
+    partition_idx = bisect_left(items, max_file_size, key_fn=file_size)
+    partition_idx -= 1
+    first_items = items[0:partition_idx]
+    rest_items = items[partition_idx:]
+    return first_items, rest_items
+  else:
+    return [], []
+
+
 # Too bad the standard Python version of this function from the bisect
 # module isn't general purpose.
 
@@ -97,35 +128,6 @@ def bisect_left(a, x, lo=0, hi=None, key_fn=None):
     else:
       hi = mid
   return lo
-
-
-def partition_items(root, items, max_file_size):
-  """Finds the initial subsequence of items such that if that
-  subsequence is serialized to XML the file size would be less than
-  but as close as possible to max_file_size.
-
-  Returns:
-    A tuple (FIRST, REST) where FIRST is the initial subsequence of
-    items that will fit in the specified size and REST is the rest of
-    the items.
-  """
-
-  def file_size(items, pos):
-    add_items(channel, items[0:pos])
-    size = len(ElementTree.tostring(root))
-    remove_items(channel, items[0:pos])
-    return size
-
-  channel = root.find('channel')
-  remove_items(channel, channel.findall('item'))
-  if items:
-    partition_idx = bisect_left(items, max_file_size, key_fn=file_size)
-    partition_idx -= 1
-    first_items = items[0:partition_idx]
-    rest_items = items[partition_idx:]
-    return first_items, rest_items
-  else:
-    return [], []
 
 
 def add_items(element, items):
