@@ -69,7 +69,7 @@ the encoding of the export file after it is created by Movable Type.
 Here's an example of deleting any byte sequences that can't be encoded
 in UTF-8:
 
-  iconv --from-code=WINDOWS-1252 --to-code=UTF-8 -c < export.xml > export-clean.xml
+    iconv --from-code=WINDOWS-1252 --to-code=UTF-8 -c < export.xml > export-clean.xml
 
 You might have to experiment with different values for the
 `--from-code` argument to get good results.
