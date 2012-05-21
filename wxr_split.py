@@ -1,12 +1,20 @@
+"""
+This program is for splitting a single giant Wordpress WXR file into
+multiple smaller WXR files to get around common file upload size
+limits.
+"""
+
+__author__ = 'John Wiseman <jjwiseman@gmail.com>'
+
+import argparse
 import operator
-import sys
 from xml.etree import ElementTree
 
 
 # 2 MB is a common file size limit, aim for 90% of that just to be
 # safe.
 
-MAX_FILE_SIZE = int(1024 * 1024 * 1.8)
+DEFAULT_MAX_FILE_SIZE = int(1024 * 1024 * 1.8)
 
 # We need to tell the ElementTree API what prefixes to use for each
 # namespace or when we serialize to an XML string it will generate
@@ -62,6 +70,9 @@ def split_file(input_file, max_file_size):
       root, rest_items, max_file_size)
 
 
+# Too bad the standard Python version of this function from the bisect
+# module isn't general purpose.
+
 def bisect_left(a, x, lo=0, hi=None, key_fn=None):
   """Return the index where to insert item x in list a, assuming a is
   sorted.
@@ -89,10 +100,16 @@ def bisect_left(a, x, lo=0, hi=None, key_fn=None):
 
 
 def partition_items(root, items, max_file_size):
-  """Partitions a list of items into (A, B), such that if the set of items A
-  is serialized to XML the file size would be less than but as close as
-  possible to max_file_size.
+  """Finds the initial subsequence of items such that if that
+  subsequence is serialized to XML the file size would be less than
+  but as close as possible to max_file_size.
+
+  Returns:
+    A tuple (FIRST, REST) where FIRST is the initial subsequence of
+    items that will fit in the specified size and REST is the rest of
+    the items.
   """
+
   def file_size(items, pos):
     add_items(channel, items[0:pos])
     size = len(ElementTree.tostring(root))
@@ -130,7 +147,16 @@ def compute_partial_filename(path, n):
 
 
 def main():
-  split_file(sys.argv[1], MAX_FILE_SIZE)
+  parser = argparse.ArgumentParser(
+    description='Split one large WXR file into multiple smaller files.',
+    formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+  parser.add_argument('input_file', metavar='PATH',
+                      help='Path of the input WXR file')
+  parser.add_argument('--max_size', dest='max_size', type=int,
+                      default=DEFAULT_MAX_FILE_SIZE,
+                      help='The maximum size of output files.')
+  args = parser.parse_args()
+  split_file(args.input_file, args.max_size)
 
 
 if __name__ == '__main__':
