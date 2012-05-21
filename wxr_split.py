@@ -152,7 +152,7 @@ def main():
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
   parser.add_argument('input_file', metavar='PATH',
                       help='Path of the input WXR file')
-  parser.add_argument('--max_size', dest='max_size', type=int,
+  parser.add_argument('--max-size', dest='max_size', type=int,
                       default=DEFAULT_MAX_FILE_SIZE,
                       help='The maximum size of output files.')
   args = parser.parse_args()
