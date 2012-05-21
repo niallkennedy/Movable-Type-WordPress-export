@@ -57,8 +57,23 @@ duplicate content between imports.
 
 # Potential problems and how to solve them
 
-## Character encoding
+## Text encoding
 
-Movable Type does not always do a good job.
+Movable Type does not enforce a consistent text encoding.  Even if
+your Movable Type is configured to use UTF-8 encoding, posts and
+comments may be polluted by text in other encodings which can cause
+errors during import.
+
+One way to deal with this issue is to use the `iconv` utility to fix
+the encoding of the export file after it is created by Movable Type.
+Here's an example of deleting any byte sequences that can't be encoded
+in UTF-8:
+
+  iconv --from-code=WINDOWS-1252 --to-code=UTF-8 -c < export.xml > export-clean.xml
+
+You might have to experiment with different values for the
+`--from-code` argument to get good results.
+
+
 
 
