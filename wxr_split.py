@@ -53,11 +53,13 @@ def split_file(input_file, max_file_size):
   print 'Found %s items' % (len(items),)
   remove_items(channel, items)
 
+  items_written = []
   partial_count = 1
   first_items, rest_items = partition_items(
     root, items, max_file_size)
   while first_items:
     add_items(channel, first_items)
+    items_written += first_items
     xml = ElementTree.tostring(root)
     partial_filename = compute_partial_filename(input_file, partial_count)
     print 'Writing %s with %s items (%s bytes, %.2f%% of target size)' % (
@@ -68,6 +70,11 @@ def split_file(input_file, max_file_size):
     partial_count += 1
     first_items, rest_items = partition_items(
       root, rest_items, max_file_size)
+
+  print 'Missing items:'
+  missing = set(items) - set(items_written)
+  for item in missing:
+    print item.find('title').text
 
 
 def partition_items(root, items, max_file_size):
@@ -82,9 +89,9 @@ def partition_items(root, items, max_file_size):
   """
 
   def file_size(items, pos):
-    add_items(channel, items[0:pos])
+    add_items(channel, items[0:pos + 1])
     size = len(ElementTree.tostring(root))
-    remove_items(channel, items[0:pos])
+    remove_items(channel, items[0:pos + 1])
     return size
 
   channel = root.find('channel')
@@ -93,7 +100,6 @@ def partition_items(root, items, max_file_size):
     # We do a binary search to find the cutoff point for what items
     # will be included in the next partial file.
     partition_idx = bisect_left(items, max_file_size, key_fn=file_size)
-    partition_idx -= 1
     first_items = items[0:partition_idx]
     rest_items = items[partition_idx:]
     return first_items, rest_items
@@ -104,7 +110,7 @@ def partition_items(root, items, max_file_size):
 # Too bad the standard Python version of this function from the bisect
 # module isn't general purpose.
 
-def bisect_left(a, x, lo=0, hi=None, key_fn=None):
+def bisect_left(a, x, lo=0, hi=None, key_fn=operator.getitem):
   """Return the index where to insert item x in list a, assuming a is
   sorted.
 
@@ -115,8 +121,6 @@ def bisect_left(a, x, lo=0, hi=None, key_fn=None):
   Optional args lo (default 0) and hi (default len(a)) bound the slice
   of a to be searched.
   """
-  if not key_fn:
-    key_fn = operator.getitem
   if lo < 0:
     raise ValueError('lo must be non-negative')
   if hi is None:
